@@ -22,3 +22,5 @@
 2023-02-14 09:44:07.153 [[32minfo[39m]: Server started listening on port 5454;
 2023-02-14 09:52:13.297 [[34mdebug[39m]: --- starting server ---;
 2023-02-14 09:52:13.444 [[32minfo[39m]: Server started listening on port 5454;
+2023-02-14 10:42:08.492 [[34mdebug[39m]: --- starting server ---;
+2023-02-14 10:43:23.966 [[31merror[39m]: Error starting server Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.y95jf.mongodb.net;
