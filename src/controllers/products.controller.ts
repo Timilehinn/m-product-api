@@ -4,6 +4,7 @@ import { isFloat } from 'lodash-contrib'
 import { Request, Response, NextFunction } from 'express';
 import ProductModel from "../schemas/product.model";
 import { GenerateProductCode } from "../helpers";
+import { ProductI } from '../interface';
 
 export const addProduct = async (req: Request, res: Response) => {
     try {
@@ -64,15 +65,16 @@ export const fetchProductsByPage = async (req: Request, res: Response) => {
         }
 
         if(!validateFields()){
-           const products = await ProductModel.find().skip(0).limit(10)
-           res.json({ data: { products, info: { prev: null, page: 1, next: 2, items: products.length } }, message: 'Page must be of type Number and not less than 1', status: 200 }).status(200)
+           let first_page = await ProductModel.find().skip(0).limit(10)
+           res.json({ data: { products: first_page, info: { prev: null, page: 1, next: 2, items: first_page.length } }, message: 'Page must be of type Number and not less than 1', status: 200 }).status(200)
         }else{
             var limit = parseInt(page.toString()) * 10  
             var offset = limit == 0? 10 : limit - 10
-            var prev = parseInt(page.toString()) == 0? null : parseInt(page.toString()) - 1
-            var next = parseInt(page.toString()) + 1
-           const products = await ProductModel.find().skip(offset).limit(limit)
-           res.json({ data: { products, info: { prev, page, next, items: products.length } }, message: 'successful', status: 200 }).status(200)
+            var prev = parseInt(page.toString()) <= 1? null : parseInt(page.toString()) - 1
+            let current_page = await ProductModel.find().skip(offset).limit(limit)
+            var next = current_page.length < 10? null : parseInt(page.toString()) + 1
+
+            res.json({ data: { products: current_page, info: { prev, page, next, items: current_page.length } }, message: 'successful', status: 200 }).status(200)
         }
     } catch (err) {
         console.log(err.message)
