@@ -65,7 +65,7 @@ export const fetchProductsByPage = async (req: Request, res: Response) => {
         }
         // when the page param is not a valid number, it returns the first page as default
         if(!validateFields()){
-           let first_page = await ProductModel.find().skip(0).limit(10)
+           let first_page = await ProductModel.find().skip(0).limit(5)
            res.json({ data: { products: first_page, info: { prev: null, page: 1, next: 2, items: first_page.length } }, message: 'Page must be of type Number and not less than 1', status: 200 }).status(200)
         }else{
             var limit = 5
