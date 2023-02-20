@@ -68,7 +68,7 @@ export const fetchProductsByPage = async (req: Request, res: Response) => {
            let first_page = await ProductModel.find().skip(0).limit(10)
            res.json({ data: { products: first_page, info: { prev: null, page: 1, next: 2, items: first_page.length } }, message: 'Page must be of type Number and not less than 1', status: 200 }).status(200)
         }else{
-            var limit = 10
+            var limit = 5
             var item_count = parseInt(page.toString()) * limit
             var offset = item_count == 0? limit : item_count - limit
             var prev = parseInt(page.toString()) <= 1? null : parseInt(page.toString()) - 1
