@@ -70,7 +70,7 @@ export const fetchProductsByPage = async (req: Request, res: Response) => {
         }else{
             var limit = 5
             var item_count = parseInt(page.toString()) * limit
-            var offset = item_count == 0? limit : item_count - limit
+            var offset = item_count <= 0? 0 : item_count - limit
             var prev = parseInt(page.toString()) <= 1? null : parseInt(page.toString()) - 1
             let current_page = await ProductModel.find().skip(offset).limit(limit)
             var next = current_page.length < limit? null : parseInt(page.toString()) + 1
