@@ -63,16 +63,17 @@ export const fetchProductsByPage = async (req: Request, res: Response) => {
             }
             return valid
         }
-
+        // when the page param is not a valid number, it returns the first page as default
         if(!validateFields()){
            let first_page = await ProductModel.find().skip(0).limit(10)
            res.json({ data: { products: first_page, info: { prev: null, page: 1, next: 2, items: first_page.length } }, message: 'Page must be of type Number and not less than 1', status: 200 }).status(200)
         }else{
-            var limit = parseInt(page.toString()) * 10  
-            var offset = limit == 0? 10 : limit - 10
+            var limit = 10
+            var item_count = parseInt(page.toString()) * limit
+            var offset = item_count == 0? limit : item_count - limit
             var prev = parseInt(page.toString()) <= 1? null : parseInt(page.toString()) - 1
             let current_page = await ProductModel.find().skip(offset).limit(limit)
-            var next = current_page.length < 10? null : parseInt(page.toString()) + 1
+            var next = current_page.length < limit? null : parseInt(page.toString()) + 1
 
             res.json({ data: { products: current_page, info: { prev, page, next, items: current_page.length } }, message: 'successful', status: 200 }).status(200)
         }
